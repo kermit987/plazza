@@ -1,0 +1,6 @@
+azera
+toto PHONE_NUMBER
+tata EMAIL_ADDRESS
+toto azera aze raze rkaz erklaz mjleP PHONE_NUMBER
+toto EMAIL_ADDRESS EMAIL_ADDRESS
+toto EMAIL_ADDRESS;     tata  PHONE_NUMBER   ; amlzkerj ; toto EMAIL_ADDRESS

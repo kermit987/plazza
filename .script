@@ -1,0 +1,74 @@
+#!/bin/bash
+
+file=./plazza
+cmdTestFile=./.cmdtest.txt
+errVl=1
+okVl=0
+
+function rev_vid_display () {
+    echo -e "\033[7m$1\033[0m"
+}
+
+function red_dump () {
+    echo -e "\033[31m$1\033[0m"
+}
+
+function green_dump () {
+    echo -e "\033[32m$1\033[0m"
+}
+
+function check_result_with () {
+    if [ $? -eq $1 ]; then
+	green_dump "OK"
+    else
+	red_dump "FAIL"
+    fi
+    echo -e "Press \033[7mEnter\033[0m to continue"
+    read
+}
+
+function make_test () {
+    if [ $1 = $file ]; then
+	array=()
+	for word in $@
+	do
+	    array+=($word)
+	done
+	lastIdx=$((${#array[@]}-1))
+	rev_vid_display "${array[*]:0:$lastIdx}"
+	${array[@]:0:$lastIdx}
+	check_result_with ${array[$lastIdx]}
+    fi
+}
+
+# Program entry point
+if [ ! -f $file ]; then
+    echo "$file not found"
+    echo "Try to execute Makefile"
+    if [ ! -f ./Makefile ]; then
+	echo "Error *** No Makefile found"
+	exit 1
+    else
+	make
+    fi
+fi
+
+if [ -f $file ]; then
+    echo -e "\033[41mError tests\033[0m"
+    make_test $file $errVl
+    rev_vid_display "Empty string parameter"
+    make_test $file "" "" $errVl
+    make_test $file 123 123 $errVl
+    make_test $file 3toto $errVl
+    make_test $file toto $errVl
+    make_test $file -123 $errVl
+    make_test $file -+++++--123 $errVl
+    echo -e "\033[42mCorrect tests\033[0m"
+    make_test $file 12 $okVl
+    if [ -f $cmdTestFile ]; then
+	cat $cmdTestFile | make_test $file 12 $okVl
+    else
+	echo "File $cmdTestFile not found"
+    fi
+    echo "*** End of tests ***"
+fi

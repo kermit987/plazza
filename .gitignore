@@ -1,0 +1,6 @@
+*.o
+plazza
+*~
+*#*#
+steven_test/
+steven_test/*
